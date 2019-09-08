@@ -62,7 +62,7 @@ public class AVLTrees {
             switch(option)
             {
                 case 1:
-                        try
+                        //try
                         {
                             Long value = 0L;
                             while(scan.hasNextInt())
@@ -73,16 +73,16 @@ public class AVLTrees {
                             }
                             scan.next();
                         }
-                        catch(InputMismatchException ex)
-                        {
-                            Debug.println("Input mismatch", ex.getMessage());
-                            scan.next();
-                        }
-                        catch(Exception ex)
-                        {
-                            Debug.println("Exception in input", ex.getMessage());
-                            scan.next();
-                        }
+//                        catch(InputMismatchException ex)
+//                        {
+//                            Debug.println("Input mismatch", ex.getMessage());
+//                            scan.next();
+//                        }
+//                        catch(Exception ex)
+//                        {
+//                            Debug.println("Exception in input", ex.getMessage());
+//                            scan.next();
+//                        }
                     break;
                     
                 case 2:
@@ -245,6 +245,8 @@ public class AVLTrees {
             } 
             else
             {
+                isR1 = true;
+                
                 if(brokenNode.nextLinkRight.nextLinkLeft != null && brokenNode.nextLinkRight.nextLinkRight != null)
                 {
                     if(brokenNode.nextLinkRight.nextLinkLeft.height > brokenNode.nextLinkRight.nextLinkRight.height)//LR Present
@@ -273,31 +275,6 @@ public class AVLTrees {
             {
                 isR1 = true;
                 
-                if(brokenNode.nextLinkLeft.nextLinkLeft != null && brokenNode.nextLinkLeft.nextLinkRight != null)
-                {
-                    if(brokenNode.nextLinkLeft.nextLinkLeft.height > brokenNode.nextLinkLeft.nextLinkRight.height)//LR Present
-                    {
-                        isL2 = true;//Left Navigate
-                    } else
-                    {
-                        isR2 = true;//Right Navigate
-                    }
-                } 
-                else
-                {
-                    if(brokenNode.nextLinkLeft.nextLinkLeft == null)
-                    {
-                        isR2 = true;//Only right is present
-                    } else
-                    {
-                        isL2 = true;//Only left is present
-                    }
-                }
-            } else
-            {
-                isL1 = true;
-                
-                
                 if(brokenNode.nextLinkRight.nextLinkLeft != null && brokenNode.nextLinkRight.nextLinkRight != null)
                 {
                     if(brokenNode.nextLinkRight.nextLinkLeft.height > brokenNode.nextLinkRight.nextLinkRight.height)//LR Present
@@ -318,18 +295,44 @@ public class AVLTrees {
                         isL2 = true;//Only left is present
                     }
                 }
+            } else
+            {
+                isL1 = true;
+                
+                
+                if(brokenNode.nextLinkLeft.nextLinkLeft != null && brokenNode.nextLinkLeft.nextLinkRight != null)
+                {
+                    if(brokenNode.nextLinkLeft.nextLinkLeft.height > brokenNode.nextLinkLeft.nextLinkRight.height)//LR Present
+                    {
+                        isL2 = true;//Left Navigate
+                    } else
+                    {
+                        isR2 = true;//Right Navigate
+                    }
+                } 
+                else
+                {
+                    if(brokenNode.nextLinkLeft.nextLinkLeft == null)
+                    {
+                        isR2 = true;//Only right is present
+                    } else
+                    {
+                        isL2 = true;//Only left is present
+                    }
+                }
             }
         }
         
         Debug.println("L1 L2 R1 R2", isL1 + " : " + isL2 + " : " + isR1 + " : " + isR2 );
         
         //if(brokenNode.nextLinkLeft != null && brokenNode.nextLinkLeft.nextLinkLeft != null)//LL Rotation
-        if(isL1 && isL2)
+        if(isL1 && isL2)//LL
         {
             Debug.println("LL Rotation on " + brokenNode.data, null);
             
             Link Node1 = brokenNode;
             Link Node2 = Node1.nextLinkLeft;
+            
             Link B = Node2.nextLinkRight;
            
             if(Node1 != beginNode)
@@ -349,8 +352,13 @@ public class AVLTrees {
             
             
             Node2.parent = Node1.parent;//Move 2 to root                
-            Node1.nextLinkLeft = B;
+            
+            Node1.nextLinkLeft = B;//Move B To 1
+            if(B != null)
+                B.parent = Node1;
+            
             Node1.parent = Node2;//Move 1 to right
+            Node2.nextLinkRight = Node1;
         } 
         else if(isR1 && isR2) 
 //if(brokenNode.nextLinkRight != null && brokenNode.nextLinkRight.nextLinkRight != null )//RR Rotation
@@ -376,11 +384,15 @@ public class AVLTrees {
             }
             
             Node2.parent = Node1.parent;//Move 2 to root                
-            Node1.nextLinkRight = B;
-            Node1.parent = Node2;//Move 1 to left
             
+            Node1.nextLinkRight = B;//Move B To right of 1
+            if(B != null)
+                B.parent = Node1;
+            
+            Node1.parent = Node2;//Move 1 to left
+            Node2.nextLinkLeft = Node1;
         }
-        else if(isR1 && isL2)
+        else if(isR1 && isL2)//RL Case
             //if(brokenNode.nextLinkRight != null && brokenNode.nextLinkRight.nextLinkLeft != null  )//RL Rotation
         {
             Debug.println("RL Rotation on "+ brokenNode.data, null);
@@ -436,7 +448,7 @@ public class AVLTrees {
                 B.parent = Node2;
             
         }
-        else if(isL1 && isR2)
+        else if(isL1 && isR2)//LRCase
             //if(brokenNode.nextLinkLeft != null && brokenNode.nextLinkLeft.nextLinkRight != null )//LR Rotation
         {
             Debug.println("LR Rotation on "+ brokenNode.data, null);
@@ -611,9 +623,10 @@ public class AVLTrees {
                     }
                 }
             }
-            
-            printAllElementsInList();
         }
+        
+            BalanceTree();
+            printAllElementsInList();
     }
     
     private Link getMaxNumberFromTree(Link currentNode)
