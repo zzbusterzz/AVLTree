@@ -102,7 +102,7 @@ public class AVLTrees {
                         else
                             DeleteANode(node, value);
                         
-                        scan.next();
+                        //scan.next();
                     }
                     catch(InputMismatchException ex)
                     {
