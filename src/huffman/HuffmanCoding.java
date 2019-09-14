@@ -6,7 +6,6 @@
 package huffman;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +19,10 @@ import sun.security.ssl.Debug;
  */
 public class HuffmanCoding 
 {
-    //open file
-    //read file
+    //read string
     //generate encode values
     //apply encode value
     //save the new file & save data with encoded values
-    
-    //TODO: Generate datastructure with encoded values
     
     private Scanner scan;
     
@@ -90,48 +86,46 @@ public class HuffmanCoding
         }
         
         HashCode root = dataQueue.remove();
+        HashMap<String, String> binaryMap = new HashMap<String, String>();
         
-        
-        HashMap<String, Integer> binaryMap = new HashMap<String, Integer>();
+       // AssignCode(root, binaryMap);//recursive function
+                
+        //iterative traversal
         HashCode currentNode = root;
-        
-        
         List<HashCode> nodes = new ArrayList<HashCode>();
         
         nodes.add(currentNode);
         nodes.add(currentNode.leftLink);
         nodes.add(currentNode.rightLink);
-        currentNode.rightLink.nodeAssignment = "1";
-        
+        currentNode.leftLink.nodeAssignment = "0";
+        currentNode.rightLink.nodeAssignment = "1";        
         
         int nodePointer = 1;
         while(nodePointer < nodes.size())
         {
-           HashCode nodeL = nodes.get(nodePointer).leftLink;
-           HashCode nodeR = nodes.get(nodePointer).rightLink;
+            HashCode nodeP = nodes.get(nodePointer);
+            HashCode nodeL = nodeP.leftLink;
+            HashCode nodeR = nodeP.rightLink;
             
             if(nodeL != null)
+            {
                 nodes.add(nodeL);
+                nodeL.nodeAssignment = nodeP.nodeAssignment + "0";
+            }else{
+                 binaryMap.put(nodeP.ch, nodeP.nodeAssignment);
+            }
+                
             
             if(nodeR != null)
+            {
                 nodes.add(nodeR);
+                nodeR.nodeAssignment = nodeP.nodeAssignment + "1";
+            }else
+            {
+                 binaryMap.put(nodeP.ch, nodeP.nodeAssignment);
+            }
             
            nodePointer++;
-        }
-        
-        
-        for(int i = 3; i < nodes.size(); i++)
-        {
-            HashCode cd = nodes.get(i);
-            if( (i-1)%2 == 0)
-                cd.nodeAssignment = nodes.get(i%2).nodeAssignment + "1";
-            else
-                cd.nodeAssignment = nodes.get(i%2).nodeAssignment + "0";
-            
-            if(cd.leftLink == null && cd.rightLink == null)
-            {
-                binaryMap.put(cd.ch, Integer.parseInt(cd.nodeAssignment));
-            }//Add to binary map if element is leaf
         }
         
         String encodedString = "";
@@ -142,12 +136,11 @@ public class HuffmanCoding
             
             if(binaryMap.containsKey(ch))
                 encodedString +=  binaryMap.get(ch);
-            else{
+            else
+            {
                 encodedString = null;
-                break;
-                
+                break;    
             }
-                
         }
         
         if(encodedString != null)
@@ -159,4 +152,26 @@ public class HuffmanCoding
             Debug.println("Key Doesnt exist", "Exiting the program");
         }
    }
+    
+    void AssignCode(HashCode node, HashMap<String, String> binaryMap)//recursion
+    {
+        if(node.rightLink != null)
+        {
+            node.rightLink.nodeAssignment = node.nodeAssignment + "1";
+            AssignCode(node.rightLink, binaryMap);
+        }
+        else
+        {
+            binaryMap.put(node.ch, node.nodeAssignment);
+        }
+        
+        if(node.leftLink != null)
+        {
+            node.leftLink.nodeAssignment = node.nodeAssignment + "0";
+            AssignCode(node.leftLink, binaryMap);
+        }else
+        {
+             binaryMap.put(node.ch, node.nodeAssignment);
+        }
+    }
 }

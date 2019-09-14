@@ -16,7 +16,7 @@ package huffman;
     public HashCode leftLink;
     public HashCode rightLink;
     
-    public String nodeAssignment = "0";
+    public String nodeAssignment = "";
     
     public HashCode(String ch,int frequency)
     {
