@@ -88,7 +88,7 @@ public class HuffmanCoding
         HashCode root = dataQueue.remove();
         HashMap<String, String> binaryMap = new HashMap<String, String>();
         
-       // AssignCode(root, binaryMap);//recursive function
+        //AssignCode(root, binaryMap);//recursive function
                 
         //iterative traversal
         HashCode currentNode = root;
@@ -127,6 +127,8 @@ public class HuffmanCoding
             
            nodePointer++;
         }
+        //end of iterative  traversal
+        
         
         String encodedString = "";
         String ch;
@@ -153,6 +155,7 @@ public class HuffmanCoding
         }
    }
     
+    //Recursive function to call
     void AssignCode(HashCode node, HashMap<String, String> binaryMap)//recursion
     {
         if(node.rightLink != null)
