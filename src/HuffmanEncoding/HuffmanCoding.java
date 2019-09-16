@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package huffman;
+package HuffmanEncoding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,7 +185,7 @@ public class HuffmanCoding
         HashCode currentNode = rootOfHuffmanTree;
         String decodedString = "";
         
-        while(encodedString != null && encodedString != "" )
+        while(encodedString != "")
         {   
             byteValue = encodedString.charAt(0) + "";
             if(encodedString.length() > 1)
