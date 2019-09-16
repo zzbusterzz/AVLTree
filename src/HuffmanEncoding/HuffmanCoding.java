@@ -34,6 +34,7 @@ public class HuffmanCoding
     public static void main(String[] args) 
     {
         HuffmanCoding hc = new HuffmanCoding();
+        System.out.println("Enter a string to encode:");
         hc.EncodeString();
     }
     

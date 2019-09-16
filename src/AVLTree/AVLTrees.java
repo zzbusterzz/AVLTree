@@ -13,9 +13,9 @@ import sun.security.util.Debug;
  *
  * @author Student
  */
-public class AVLTrees {
-
-   protected class Link
+public class AVLTrees 
+{
+    protected class Link
     {
         public long data;
         
