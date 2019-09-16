@@ -80,7 +80,7 @@ public class HuffmanCoding
             parentNode.leftLink = node1;
             parentNode.rightLink = node2;
             
-            Debug.println("Nodes: " + node1.frequency + " : "  + node1.ch,  "Nodes: " + node2.frequency + " : "  + node2.ch);
+        //    Debug.println("Nodes: " + node1.frequency + " : "  + node1.ch,  "Nodes: " + node2.frequency + " : "  + node2.ch);
             
             dataQueue.add(parentNode);
         }
@@ -153,6 +153,7 @@ public class HuffmanCoding
         {
             Debug.println("Key Doesnt exist", "Exiting the program");
         }
+        DecodeHuffman(encodedString, currentNode);
    }
     
     //Recursive function to call
@@ -175,6 +176,51 @@ public class HuffmanCoding
         }else
         {
              binaryMap.put(node.ch, node.nodeAssignment);
+        }
+    }
+    
+    void DecodeHuffman(String encodedString, HashCode rootOfHuffmanTree)
+    {
+        String byteValue;
+        HashCode currentNode = rootOfHuffmanTree;
+        String decodedString = "";
+        
+        while(encodedString != null && encodedString != "" )
+        {   
+            byteValue = encodedString.charAt(0) + "";
+            if(encodedString.length() > 1)
+                encodedString = encodedString.substring(1);
+            else
+                encodedString = "";
+            
+            if(byteValue.equals("0"))
+            {
+                currentNode = currentNode.leftLink;   
+                if(currentNode.leftLink == null)
+                {
+                    decodedString += currentNode.ch;
+                    currentNode = rootOfHuffmanTree;
+                }
+            } 
+            else
+            {
+                 currentNode = currentNode.rightLink;
+                if(currentNode.rightLink == null)
+                {
+                    decodedString += currentNode.ch;
+                    currentNode = rootOfHuffmanTree;
+                }
+            }
+            System.out.println("Huffman decoding...: " + decodedString + ": " + encodedString);
+        }
+                
+        if(decodedString != null)
+        {
+            System.out.println("Huffman decoded String : " + decodedString);
+        }
+        else
+        {
+            Debug.println("Key Doesnt exist", "Exiting the program");
         }
     }
 }
