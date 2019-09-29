@@ -243,7 +243,7 @@ public class BTLinkedList
                         max.parent.nextLinkRight = null;
                     
                                         
-                    max.nextLinkLeft = currentNode.nextLinkLeft;//assign child of max node left from current node
+                    //max.nextLinkLeft = currentNode.nextLinkLeft;//assign child of max node left from current node
                     max.nextLinkRight = currentNode.nextLinkRight;//assign child of max node right from current node
 
                     if(max.nextLinkLeft != null)//Reassign children parent left

@@ -30,6 +30,9 @@ public class BracketTest
         
         while(!value.isEmpty() || !value.equals(""))
         {
+            endBracketStack.clear();;
+            stack.clear();
+            
             System.out.println("Enter the string to validate(Enter to exit)");
             value = scan.nextLine();
 

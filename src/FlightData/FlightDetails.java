@@ -31,6 +31,45 @@ public class FlightDetails {
             this.date = date;
             this.time = time;
         }
+        
+        // Overriding the hashcode() function 
+        @Override
+        public int hashCode() 
+        { 
+            String val = (GenerateASCIIString(origin) + GenerateASCIIString(destination)) + "" + (GenerateASCIIString(date) + GenerateASCIIString(time));
+            return Integer.parseInt(val);
+        } 
+        
+         @Override
+        public boolean equals(Object o) 
+        { 
+            if (this == o) { 
+                return true; 
+            } 
+            if (o == null) { 
+                return false; 
+            } 
+            if (this.getClass() != o.getClass()) { 
+                return false; 
+            } 
+            TravelData other = (TravelData)o; 
+            if (!this.origin.equals(other.origin)
+                || !this.destination.equals(other.destination)
+                || !this.date.equals(other.date)
+                || !this.time.equals(other.time)) { 
+                return false; 
+            } 
+            return true; 
+        } 
+        
+        int GenerateASCIIString(String value){
+            int hashCode = 0;
+            for(int i = 0; i <value.length(); i++){
+                int c = value.charAt(i);
+                hashCode += c;
+            }   
+            return hashCode;
+        }
     }
 
     private class FlightData {
@@ -66,16 +105,14 @@ public class FlightDetails {
        list.BeginOperations();
     }
     
-    
     void BeginOperations(){ 
        flightStoreData = new HashMap<TravelData, FlightData>();
        LoadFlightData();
     }
     
-    
     void LoadFlightData(){
          try {
-            File file =  new File("D:\\AVLTree_\\src\\FlightData\\FlightData.txt");
+            File file =  new File("C:\\Users\\1\\Documents\\NetBeansProjects\\DS_PracticalsSet\\src\\FlightData\\FlightData.txt");
             Scanner sc = new Scanner(file);
             
             while (sc.hasNextLine()) {
@@ -99,9 +136,37 @@ public class FlightDetails {
             
                  if(!flightStoreData.containsKey(f1Data)){
                      flightStoreData.put(f1Data, f1TData);
-                 }
+                 }                 
             }
-            //System.out.println(sc.nextLine());
+            
+            sc.close();
+            sc = new Scanner(System.in);
+            
+            String srcCity;
+            String dstCity;
+            String date;
+            String time;
+            String difference;
+            
+            System.out.println("Enter the source city");
+            srcCity = sc.nextLine();
+            
+            System.out.println("Enter the destination city");
+            dstCity = sc.nextLine();
+            
+            System.out.println("Enter the date(DD/MM/YY)");
+            date = sc.nextLine();
+            
+            System.out.println("Enter the time(HH:MM:SS)");
+            time = sc.nextLine();
+            
+            TravelData f1Data = new TravelData(srcCity, dstCity, date, time);
+         
+            if(flightStoreData.containsKey(f1Data)){
+                FlightData f1TData = flightStoreData.get(f1Data);
+                System.out.println("Flight destination data : \nFlight name:" + f1TData.flightName + " : Flight Duration : " + f1TData.flightDuration + " : Total Seats : " + f1TData.seatCountTotal + " : First Class - Available Seats : " + f1TData.flightSeatFirst.availableTickets + " : First Class - Fare : " + f1TData.flightSeatFirst.classFare + " : Economy - Available Seats : " + f1TData.flightSeatsEconomy.availableTickets + " : Economy - Fare: " + f1TData.flightSeatsEconomy.classFare);    
+            }else
+                System.out.println("No available flights found");
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FlightDetails.class.getName()).log(Level.SEVERE, null, ex);
